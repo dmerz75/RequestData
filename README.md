@@ -1,2 +1,10 @@
 # RequestData
-Retrieve Data from websites
+Retrieve data from websites
+
+## GET, POST
+
+## Params
+
+## Process
+
+## Write
