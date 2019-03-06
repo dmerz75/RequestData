@@ -4,16 +4,17 @@
 # import sys
 # import time
 import requests
-from NielsenLibs.NielsenTechnicalAPI import urls
 import json
 from pprint import pprint
+# from resources.databases import config as config
+from resources.NielsenTechnicalAPI import nielsen_config as config
 
 
-def main():
+def main(job_name):
 
     # Receive URL, params.
-    myurl = urls['TestingSite']['url']
-    params = urls['TestingSite']['params']
+    myurl = config[job_name]['url']
+    params = config[job_name]['params']
     print(myurl)
     pprint(params)
 
@@ -41,4 +42,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main(sys.argv[1])
+    main('TestingSite')
