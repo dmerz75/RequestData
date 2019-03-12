@@ -1,4 +1,5 @@
 test*
+api_downloads*
 resources/NielsenTechnicalAPI.py
 resources/NielsenSampleData.json
 extras*

@@ -7,7 +7,8 @@ from shared.Application import Application
 def main(job):
     App = Application(job)
     App._get_args()
-    App.args = ['TestingSite']
+    # App.args = ['TestingSite']
+    App.args = ['Nielsen']
     # App._printAttributes()
     App._run_job()
     sys.exit()
