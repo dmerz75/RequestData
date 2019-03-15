@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import sys
+# import sys
 import time
-import requests
-import json
-import re
+# import requests
+# import json
+# import re
 import itertools
-from pprint import pprint
+# from pprint import pprint
 from datetime import datetime
 from datetime import timedelta
-from src.response_query import *
+from src.response_query import extend_url, request_api, save_response_content
 from src.date_range import get_date_range
 from lib.NielsenTechnicalAPI import nielsen_config as cfg
 
@@ -42,13 +42,11 @@ def main(app):
     print("Destination: ", output_dir)
     print('base_url: ', base_url)
 
-
     # Date:
     num_weeks = 6
-    start_date = datetime.strptime(params['startDate'][0],date_format)
+    start_date = datetime.strptime(params['startDate'][0], date_format)
     date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(2, num_weeks)]
     print(len(date_list), date_list[0:3])
-
 
     # Generate all combinations of queries to the url api.
     queries = [params[pm] for pm in params.keys()]
@@ -57,8 +55,7 @@ def main(app):
     print("Number of combinations: ", len(combinations))
     print("Example: ", combinations[0])
 
-
-    start_index = 0
+    start_index = 4500
 
     for i, combo in enumerate(combinations[start_index:]):
 
@@ -74,24 +71,23 @@ def main(app):
         print(i, " of ", len(combinations))
 
         # Date:
-        start_date, end_date = get_date_range(combo[1],days=-6)
+        start_date, end_date = get_date_range(combo[1], days=-6)
         print('Dates: ', start_date, " - ", end_date)
-
 
         # Build url:
         my_url = ''
-        my_url = extend_url(base_url,'sample=',combo[0],'&')
-        my_url = extend_url(my_url,'startDate=',start_date,'&')
-        my_url = extend_url(my_url,'endDate=',end_date,'&')
-        my_url = extend_url(my_url,'demographics=',combo[2],'&')
-        my_url = extend_url(my_url,'originators=',combo[3],'&')
-        my_url = extend_url(my_url,'dataStreams=',combo[4],'&')
-        my_url = extend_url(my_url,'mediaSources=',combo[5],'&')
-        my_url = extend_url(my_url,'contributions=',combo[6])
+        my_url = extend_url(base_url, 'sample=', combo[0], '&')
+        my_url = extend_url(my_url, 'startDate=', start_date, '&')
+        my_url = extend_url(my_url, 'endDate=', end_date, '&')
+        my_url = extend_url(my_url, 'demographics=', combo[2], '&')
+        my_url = extend_url(my_url, 'originators=', combo[3], '&')
+        my_url = extend_url(my_url, 'dataStreams=', combo[4], '&')
+        my_url = extend_url(my_url, 'mediaSources=', combo[5], '&')
+        my_url = extend_url(my_url, 'contributions=', combo[6])
         print(my_url)
-
 
         # Request & Save!
         response, response_code = request_api(my_url, None, headers)
-        save_response_content(query, response, path=output_dir, file_type =outfile_type)
-        time.sleep(delay) # max 15 per minute.
+        save_response_content(query, response, path=output_dir, file_type=outfile_type)
+        # max 15 per minute.
+        time.sleep(delay)

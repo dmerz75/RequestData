@@ -1,11 +1,11 @@
 import os
-import sys
+# import sys
 import requests
 import json
 import re
 
 
-def extend_url(base_url,*args):
+def extend_url(base_url, *args):
 
     url_components = [base_url] + [x for x in args]
     nielsen_url = ''.join(url_components)
@@ -13,8 +13,7 @@ def extend_url(base_url,*args):
     return nielsen_url
 
 
-
-def request_api(url,params,headers):
+def request_api(url, params, headers):
 
     # Request & get response = requests.get(url=myurl, params=params, headers=)
     response = requests.get(url, params=params, headers=headers)
@@ -42,8 +41,8 @@ def save_response_content(filename, response, path=None, file_type=None):
     if response_code != 200:
         return
 
-    if path != None:
-        write_path = os.path.join(path,filename)
+    if path is not None:
+        write_path = os.path.join(path, filename)
     else:
         write_path = filename
 

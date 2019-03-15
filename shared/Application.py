@@ -4,8 +4,10 @@ import importlib
 
 
 class Application:
-
-    def __init__(self,job):
+    '''
+    A general application for python job control.
+    '''
+    def __init__(self, job):
         '''
         An application.
         '''
@@ -21,11 +23,12 @@ class Application:
     def _printAttributes(self):
         keys = dir(self)
         for key in keys:
-            print(key,':\t',getattr(self,key))
+            print(key, ':\t', getattr(self, key))
 
     def _get_args(self):
+        print(sys.argv)
         parser = argparse.ArgumentParser()
-        parser.add_argument("-j","--job_name",help="The Job Name")
+        parser.add_argument("-j", "--job_name", help="The Job Name")
         args = vars(parser.parse_args())
         # print(args)
         # sys.exit()
