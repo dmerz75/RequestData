@@ -1,8 +1,6 @@
 test*
 api_*
 *downloads*
-resources/NielsenTechnicalAPI.py
-resources/NielsenSampleData.json
 extras*
 
 # Byte-compiled / optimized / DLL files

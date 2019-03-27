@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-# import sys
+import sys
 import time
 # import requests
 # import json
@@ -46,7 +46,7 @@ def main(app):
     num_weeks = 6
     start_date = datetime.strptime(params['startDate'][0], date_format)
     date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(2, num_weeks)]
-    print(len(date_list), date_list[0:3])
+    print(len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
     queries = [params[pm] for pm in params.keys()]
@@ -55,10 +55,13 @@ def main(app):
     print("Number of combinations: ", len(combinations))
     print("Example: ", combinations[0])
 
-    start_index = 4500
+    count_files_exist = 0
+    start_index = 0
+    # sys .exit()
 
     for i, combo in enumerate(combinations[start_index:]):
-
+        # print(i, combo)
+        # continue
         i += start_index
 
         # Build query:
@@ -66,6 +69,7 @@ def main(app):
         query = query.replace(' ', '')
         query = query.replace('/', '')
         if os.path.exists(os.path.join(output_dir, query)):
+            count_files_exist += 1
             continue
 
         print(i, " of ", len(combinations))
@@ -84,10 +88,12 @@ def main(app):
         my_url = extend_url(my_url, 'dataStreams=', combo[4], '&')
         my_url = extend_url(my_url, 'mediaSources=', combo[5], '&')
         my_url = extend_url(my_url, 'contributions=', combo[6])
-        print(my_url)
+        # print(my_url)
 
         # Request & Save!
         response, response_code = request_api(my_url, None, headers)
         save_response_content(query, response, path=output_dir, file_type=outfile_type)
-        # max 15 per minute.
+        # # max 15 per minute.
         time.sleep(delay)
+
+    print("Files that exist: ", count_files_exist)
