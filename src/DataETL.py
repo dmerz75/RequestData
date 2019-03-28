@@ -24,8 +24,8 @@ def main(app):
     '''
 
     job_name = app.args[0]
-    job_type = 'programRatings'
-    # job_type = 'commercialRatings'
+    # job_type = 'programRatings'
+    job_type = 'commercialRatings'
 
     # Configurations: params, headers
     config = cfg[job_name][job_type]
@@ -49,8 +49,11 @@ def main(app):
     print(len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
-    queries = [params[pm] for pm in params.keys()]
-    queries.append(date_list)
+    queries = [params[pm] for pm in params.keys() if pm != 'startDate']
+    # queries = [params[pm] for pm in params.keys()]
+    # print(queries)
+    # sys.exit()
+    queries.insert(1, date_list)
     combinations = list(itertools.product(*queries))
     print("Number of combinations: ", len(combinations))
     print("Example: ", combinations[0])
@@ -66,6 +69,8 @@ def main(app):
 
         # Build query:
         query = ''.join(combo) + '.' + outfile_type
+        # query = query.replace('%2B3','_')
+        query = query.replace('%','_')
         query = query.replace(' ', '')
         query = query.replace('/', '')
         if os.path.exists(os.path.join(output_dir, query)):
@@ -77,6 +82,8 @@ def main(app):
         # Date:
         start_date, end_date = get_date_range(combo[1], days=-6)
         print('Dates: ', start_date, " - ", end_date)
+        # print(combo)
+        # break
 
         # Build url:
         my_url = ''
