@@ -10,17 +10,21 @@ import json
 my_dir = os.path.abspath(os.path.dirname('__file__'))
 
 # subdir = 'api_programRatings'
-subdir = 'api_commercialRatings'
+# subdir = 'api_commercialRatings'
+subdir = sys.argv[1]
+print("Searching directory: ", subdir)
+
 outdir = subdir + '_json'
+
 if not os.path.exists(outdir):
-        os.makedirs(outdir)
+    os.makedirs(outdir)
 
 lst_api_raw = glob(os.path.join(my_dir, subdir, '*.json'))
 
 for json_file in lst_api_raw:
 
     base_name = os.path.basename(json_file)
-    write_path = os.path.join(outdir,base_name)
+    write_path = os.path.join(outdir, base_name)
     # write_path = write_path.replace('%2B3','_')
     write_path = write_path.replace('%','_')
     # print(write_path)
