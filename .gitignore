@@ -2,6 +2,9 @@ test*
 api_*
 *downloads*
 extras*
+.idea/
+RequestData.iml
+info.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
