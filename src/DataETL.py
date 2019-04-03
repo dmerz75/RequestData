@@ -24,8 +24,12 @@ def main(app):
     '''
 
     job_name = app.args[0]
-    # job_type = 'programRatings'
-    job_type = 'commercialRatings'
+    job_type = 'programRatings'
+    # job_type = 'commercialRatings'
+    # job_type = 'originators'
+    # job_type = 'demographics'
+    # job_type = 'marketBreaks'
+    # job_type = 'dataAvailability'
 
     # Configurations: params, headers
     config = cfg[job_name][job_type]
@@ -37,27 +41,27 @@ def main(app):
     params = config['params']
     headers = config['headers']
 
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     print("job_name: ", job_name)
     print("job_type: ", job_type)
     print("Destination: ", output_dir)
     print('base_url: ', base_url)
 
     # Date:
-    num_weeks = 6
+    num_weeks = 6 # 2-6
     start_date = datetime.strptime(params['startDate'][0], date_format)
     date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(2, num_weeks)]
     print(len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
     queries = [params[pm] for pm in params.keys() if pm != 'startDate']
-    # queries = [params[pm] for pm in params.keys()]
     # print(queries)
-    # sys.exit()
     queries.insert(1, date_list)
     combinations = list(itertools.product(*queries))
     print("Number of combinations: ", len(combinations))
     print("Example: ", combinations[0])
-
     count_files_exist = 0
     start_index = 0
     # sys .exit()
@@ -70,7 +74,7 @@ def main(app):
         # Build query:
         query = ''.join(combo) + '.' + outfile_type
         # query = query.replace('%2B3','_')
-        query = query.replace('%','_')
+        query = query.replace('%', '_')
         query = query.replace(' ', '')
         query = query.replace('/', '')
         if os.path.exists(os.path.join(output_dir, query)):
@@ -88,14 +92,19 @@ def main(app):
         # Build url:
         my_url = ''
         my_url = extend_url(base_url, 'sample=', combo[0], '&')
-        my_url = extend_url(my_url, 'startDate=', start_date, '&')
-        my_url = extend_url(my_url, 'endDate=', end_date, '&')
-        my_url = extend_url(my_url, 'demographics=', combo[2], '&')
-        my_url = extend_url(my_url, 'originators=', combo[3], '&')
-        my_url = extend_url(my_url, 'dataStreams=', combo[4], '&')
-        my_url = extend_url(my_url, 'mediaSources=', combo[5], '&')
-        my_url = extend_url(my_url, 'contributions=', combo[6])
+        if job_type not in ['marketBreaks', 'dataAvailability']:
+            my_url = extend_url(my_url, 'startDate=', start_date, '&')
+            my_url = extend_url(my_url, 'endDate=', end_date, '&')
+
+        for i, k in enumerate(params.keys()):
+            if k in ['sample', 'startDate', 'endDate']:
+                continue
+            my_url = extend_url(my_url, '{}='.format(k), combo[i], '&')
+
+        # strip final '&'
+        my_url = my_url[0:-1]
         # print(my_url)
+        # sys.exit()
 
         # Request & Save!
         response, response_code = request_api(my_url, None, headers)
