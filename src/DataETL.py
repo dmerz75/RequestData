@@ -26,7 +26,7 @@ def main(app):
     job_name = app.args[0]
     job_type = 'programRatings'
     # job_type = 'commercialRatings'
-    # job_type = 'originators'
+    job_type = 'originators'
     # job_type = 'demographics'
     # job_type = 'marketBreaks'
     # job_type = 'dataAvailability'
@@ -56,16 +56,16 @@ def main(app):
     print(len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
-    # print(params.keys())
-    # allkeys (except startDate
-    allkeys = ['sample', 'demographics', 'originators', 'dataStreams', 'mediaSources', 'contributions']
-    keys = list(set(allkeys).intersection(params.keys()))
-    # [allkeys.remove(k) for k in allkeys if k not in params.keys()]
-    # print(allkeys)
-    print(keys)
-    # sys.exit()
-    queries = [params[pm] for pm in keys if pm != 'startDate']
-    queries.insert(1, date_list)
+    keys = sorted(['contributions', 'dataStreams', 'demographics', 'mediaSources', 'originators', 'sample', 'startDate'])
+    order = [6, 4, 2, 5, 3, 0, 1]
+    korder = list(sorted(zip(order, keys)))
+    # print(keys)
+    print(korder)
+    korder = sorted([k for k in korder if k[1] in params.keys()])
+    print(korder)
+    # queries = [params[pm[1]] for pm in korder if pm != 'startDate']
+    queries = [params[pm[1]] for pm in korder]
+    # queries.insert(1, date_list)
     combinations = list(itertools.product(*queries))
     print("Number of combinations: ", len(combinations))
     print("Example: ", combinations[0:3])
