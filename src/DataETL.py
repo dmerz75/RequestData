@@ -11,7 +11,8 @@ import itertools
 from datetime import datetime
 from datetime import timedelta
 from src.response_query import extend_url, request_api, get_response_content
-from src.response_query import save_response_content, fix_nielsen_content
+from src.response_query import save_response_content, fix_nielsen_content, empty_file_content
+from src.cluster import push_file
 from src.date_range import get_date_range
 # from src.process_jsons import remove_brackets
 from lib.NielsenTechnicalAPI import nielsen_config as cfg
@@ -37,6 +38,7 @@ def main(app):
     config = cfg[job_name][job_type]
     positions = cfg[job_name]['positions']
     output_dir = config['output_dir'] + job_type
+    cluster_dir = config['cluster_dir']
     outfile_type = config['output_file_type']
     date_format = config['date_format']
     delay = config['delay']
@@ -136,6 +138,11 @@ def main(app):
 
         text = fix_nielsen_content(content)
         save_response_content(query, text, output_dir)
+
+        commands = ['echo', 'hdfs', 'dfs', '-put']
+        dest_dir = os.path.join(cluster_dir + "%s_%s" % (job_type, start_date))
+        push_file(commands, os.path.join(output_dir, query), dest_dir)
+        empty_file_content(query, output_dir)
         # save_response_content(query, response, response_text, output_dir, outfile_type)
         # max 15 per minute.
         time.sleep(delay)

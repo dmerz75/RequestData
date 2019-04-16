@@ -84,3 +84,19 @@ def save_response_content(filename, content, path=None):
         print("{}  write FAILED.".format(filename))
         return 0
     return
+
+def empty_file_content(filename, path=None):
+
+    if path is not None:
+        write_path = os.path.join(path, filename)
+    else:
+        write_path = filename
+
+    try:
+        with open(write_path, "w") as fp:
+            fp.write('')
+        print("{}  emptied.".format(filename))
+    except IOError:
+        print("{}  not emptied.".format(filename))
+        return 0
+    return
