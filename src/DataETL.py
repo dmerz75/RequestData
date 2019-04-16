@@ -56,19 +56,20 @@ def main(app):
     print(len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
-    keys = sorted(['contributions', 'dataStreams', 'demographics', 'mediaSources', 'originators', 'sample', 'startDate'])
-    order = [6, 4, 2, 5, 3, 0, 1]
-    korder = list(sorted(zip(order, keys)))
+    # keys = sorted(['contributions', 'dataStreams', 'demographics', 'mediaSources', 'originators', 'sample', 'startDate'])
+    # order = [6, 4, 2, 5, 3, 0, 1]
+    # korder = list(sorted(zip(order, keys)))
     # print(keys)
-    print(korder)
-    korder = sorted([k for k in korder if k[1] in params.keys()])
-    print(korder)
+    # print(korder)
+    # korder = sorted([k for k in korder if k[1] in params.keys()])
+    # print(korder)
+    # queries = [params[pm[1]] for pm in korder]
     # queries = [params[pm[1]] for pm in korder if pm != 'startDate']
-    queries = [params[pm[1]] for pm in korder]
-    # queries.insert(1, date_list)
+    queries = [params[pm] for pm in params.keys() if pm != 'startDate']
+    queries.insert(1, date_list)
     combinations = list(itertools.product(*queries))
     print("Number of combinations: ", len(combinations))
-    print("Example: ", combinations[1])
+    print("Example: ", combinations[0])
     count_files_exist = 0
     start_index = 0
     # sys.exit()
