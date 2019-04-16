@@ -26,7 +26,7 @@ def main(app):
     job_name = app.args[0]
     job_type = 'programRatings'
     # job_type = 'commercialRatings'
-    job_type = 'originators'
+    # job_type = 'originators'
     # job_type = 'demographics'
     # job_type = 'marketBreaks'
     # job_type = 'dataAvailability'
@@ -71,7 +71,7 @@ def main(app):
     print("Example: ", combinations[0:3])
     count_files_exist = 0
     start_index = 0
-    sys.exit()
+    # sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):
         # print(i, combo)
