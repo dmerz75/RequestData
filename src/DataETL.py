@@ -10,8 +10,10 @@ import itertools
 # from pprint import pprint
 from datetime import datetime
 from datetime import timedelta
-from src.response_query import extend_url, request_api, save_response_content
+from src.response_query import extend_url, request_api, get_response_content
+from src.response_query import save_response_content, fix_nielsen_content
 from src.date_range import get_date_range
+# from src.process_jsons import remove_brackets
 from lib.NielsenTechnicalAPI import nielsen_config as cfg
 
 
@@ -33,6 +35,7 @@ def main(app):
 
     # Configurations: params, headers
     config = cfg[job_name][job_type]
+    positions = cfg[job_name]['positions']
     output_dir = config['output_dir'] + job_type
     outfile_type = config['output_file_type']
     date_format = config['date_format']
@@ -40,6 +43,8 @@ def main(app):
     base_url = config['url']
     params = config['params']
     headers = config['headers']
+    num_weeks = config['num_weeks']
+    max_retries = 25
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -50,10 +55,9 @@ def main(app):
     print('base_url: ', base_url)
 
     # Date:
-    num_weeks = 3 # 2-6
-    start_date = datetime.strptime(params['startDate'][0], date_format)
-    date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(2, num_weeks)]
-    print(len(date_list), date_list)
+    start_date = datetime.strptime(config['startDate'], date_format)
+    date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(0, num_weeks)]
+    print('Dates: ', len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
     # keys = sorted(['contributions', 'dataStreams', 'demographics', 'mediaSources', 'originators', 'sample', 'startDate'])
@@ -72,6 +76,8 @@ def main(app):
     print("Example: ", combinations[0])
     count_files_exist = 0
     start_index = 0
+    retries = 0
+
     # sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):
@@ -104,20 +110,34 @@ def main(app):
             my_url = extend_url(my_url, 'startDate=', start_date, '&')
             my_url = extend_url(my_url, 'endDate=', end_date, '&')
 
-        for i, k in enumerate(params.keys()):
+        for k in params.keys():
             if k in ['sample', 'startDate', 'endDate']:
                 continue
-            my_url = extend_url(my_url, '{}='.format(k), combo[i], '&')
+            # print(k)
+            # print(positions[k])
+            # print(combo)
+            my_url = extend_url(my_url, '{}='.format(k), combo[positions[k]], '&')
+            # print(my_url)
 
         # strip final '&'
         my_url = my_url[0:-1]
-        print(my_url)
-        sys.exit()
+        # print(my_url)
+        # sys.exit()
 
         # Request & Save!
         response, response_code = request_api(my_url, None, headers)
-        save_response_content(query, response, path=output_dir, file_type=outfile_type)
-        # # max 15 per minute.
+        if ((response_code != 200) and (retries <= max_retries)):
+            print("retrying ", retries)
+            retries += 1
+            i -= 1
+            time.sleep(delay)
+        else:
+            content = get_response_content(response)
+
+        text = fix_nielsen_content(content)
+        save_response_content(query, text, output_dir)
+        # save_response_content(query, response, response_text, output_dir, outfile_type)
+        # max 15 per minute.
         time.sleep(delay)
 
     print("Files that exist: ", count_files_exist)
