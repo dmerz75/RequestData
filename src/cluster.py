@@ -1,7 +1,7 @@
 import subprocess
 
 def run_command(invocation):
-    print(type(invocation),invocation)
+    # print(type(invocation),invocation)
     pipe = subprocess.Popen(invocation, stdin=subprocess.PIPE,
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, stderr = pipe.communicate()
@@ -12,9 +12,13 @@ def run_command(invocation):
 
 def push_file(commands, src, dest):
     # print(commands)
-    print(src)
-    print(dest)
-    commands.append(src)
-    commands.append(dest)
+    # print(src)
+    # print(dest)
+    command_dir = ['hdfs', 'dfs', '-mkdir -p']
+    command_dir.append(dest)
+    run_command(command_dir)
 
+    command_put = ['hdfs', 'dfs', '-put']
+    command_put.append(src)
+    command_put.append(dest)
     run_command(commands)

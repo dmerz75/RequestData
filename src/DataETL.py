@@ -139,10 +139,11 @@ def main(app):
         text = fix_nielsen_content(content)
         save_response_content(query, text, output_dir)
 
-        commands = ['echo', 'hdfs', 'dfs', '-put']
+
         dest_dir = os.path.join(cluster_dir + "%s_%s" % (job_type, start_date))
-        push_file(commands, os.path.join(output_dir, query), dest_dir)
-        empty_file_content(query, output_dir)
+        # push_file(commands, os.path.join(output_dir, query), dest_dir)
+        # empty_file_content(query, output_dir)
+
         # save_response_content(query, response, response_text, output_dir, outfile_type)
         # max 15 per minute.
         time.sleep(delay)
