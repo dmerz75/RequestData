@@ -14,7 +14,8 @@ def push_file(src, dest):
     # print(commands)
     # print(src)
     # print(dest)
-    command_dir = ['hdfs', 'dfs', '-mkdir -p']
+    # command_dir = ['hdfs', 'dfs', '-mkdir -p']
+    command_dir = ['hadoop', 'fs', '-mkdir', '-p']
     command_dir.append(dest)
     run_command(command_dir)
 
