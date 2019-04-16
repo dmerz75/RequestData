@@ -68,7 +68,7 @@ def main(app):
     # queries.insert(1, date_list)
     combinations = list(itertools.product(*queries))
     print("Number of combinations: ", len(combinations))
-    print("Example: ", combinations[0:3])
+    print("Example: ", combinations[1])
     count_files_exist = 0
     start_index = 0
     # sys.exit()
