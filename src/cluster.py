@@ -10,7 +10,7 @@ def run_command(invocation):
         print('stderr >> ', stderr)
 
 
-def push_file(commands, src, dest):
+def push_file(src, dest):
     # print(commands)
     # print(src)
     # print(dest)
@@ -21,4 +21,4 @@ def push_file(commands, src, dest):
     command_put = ['hdfs', 'dfs', '-put']
     command_put.append(src)
     command_put.append(dest)
-    run_command(commands)
+    run_command(command_put)
