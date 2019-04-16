@@ -50,21 +50,28 @@ def main(app):
     print('base_url: ', base_url)
 
     # Date:
-    num_weeks = 6 # 2-6
+    num_weeks = 3 # 2-6
     start_date = datetime.strptime(params['startDate'][0], date_format)
     date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(2, num_weeks)]
     print(len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
-    queries = [params[pm] for pm in params.keys() if pm != 'startDate']
-    # print(queries)
-    queries.insert(1, date_list)
+    keys = sorted(['contributions', 'dataStreams', 'demographics', 'mediaSources', 'originators', 'sample', 'startDate'])
+    order = [6, 4, 2, 5, 3, 0, 1]
+    korder = list(sorted(zip(order, keys)))
+    # print(keys)
+    print(korder)
+    korder = sorted([k for k in korder if k[1] in params.keys()])
+    print(korder)
+    # queries = [params[pm[1]] for pm in korder if pm != 'startDate']
+    queries = [params[pm[1]] for pm in korder]
+    # queries.insert(1, date_list)
     combinations = list(itertools.product(*queries))
     print("Number of combinations: ", len(combinations))
-    print("Example: ", combinations[0])
+    print("Example: ", combinations[0:3])
     count_files_exist = 0
     start_index = 0
-    # sys .exit()
+    # sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):
         # print(i, combo)
@@ -103,8 +110,8 @@ def main(app):
 
         # strip final '&'
         my_url = my_url[0:-1]
-        # print(my_url)
-        # sys.exit()
+        print(my_url)
+        sys.exit()
 
         # Request & Save!
         response, response_code = request_api(my_url, None, headers)
