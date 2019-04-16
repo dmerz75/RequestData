@@ -56,19 +56,22 @@ def main(app):
     print(len(date_list), date_list)
 
     # Generate all combinations of queries to the url api.
-    queries = [params[pm] for pm in params.keys() if pm != 'startDate']
-    # print(queries)
+    # print(params.keys())
+    # allkeys (except startDate
+    allkeys = ['sample', 'demographics', 'originators', 'dataStreams', 'mediaSources', 'contributions']
+    keys = list(set(allkeys).intersection(params.keys()))
+    # [allkeys.remove(k) for k in allkeys if k not in params.keys()]
+    # print(allkeys)
+    print(keys)
+    # sys.exit()
+    queries = [params[pm] for pm in keys if pm != 'startDate']
     queries.insert(1, date_list)
-    it_list = itertools.product(*queries)
-    print(it_list)
-
-
     combinations = list(itertools.product(*queries))
     print("Number of combinations: ", len(combinations))
-    print("Example: ", combinations[0])
+    print("Example: ", combinations[0:3])
     count_files_exist = 0
     start_index = 0
-    sys .exit()
+    sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):
         # print(i, combo)
