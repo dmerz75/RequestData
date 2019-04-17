@@ -138,11 +138,17 @@ def main(app):
 
         text = fix_nielsen_content(content)
         save_response_content(query, text, output_dir)
+        query_file = os.path.join(output_dir, query)
 
         # cluster
         dest_dir = os.path.join(cluster_dir + "%s_%s" % (job_type, end_date))
-        push_file(os.path.join(output_dir, query), dest_dir)
-        empty_file_content(query, output_dir)
+        result = push_file(query_file, dest_dir)
+        if result:
+            empty_file_content(query_file)
+            print(query_file, " -- emptied! --")
+        else:
+            print(query_file, " -- REMOVED! --")
+            os.remove(query_file)
 
         # save_response_content(query, response, response_text, output_dir, outfile_type)
         # max 15 per minute.
