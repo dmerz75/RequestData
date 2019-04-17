@@ -83,9 +83,9 @@ def main(app):
     # sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):
-        print(i, combo)
-        if i != 623:
-            continue
+        # print(i, combo)
+        # if i != 623:
+        #     continue
         i += start_index
 
         # Build query:
