@@ -52,15 +52,29 @@ def get_response_content(response, file_type='json'):
 
 def fix_nielsen_content(content):
 
-    pos = content.find("[")
-    pos2 = max([pos for pos, char in enumerate(content) if char == "]"])
+    pos1 = content.find("[")
+    # print("pos1: ", pos1)
+    if pos1 == -1:
+        pos1 = 0
+
+    try:
+        pos2 = max([pos for pos, char in enumerate(content) if char == "]"])
+    except ValueError:
+        pos2 = len(content)
+
     # print(pos,pos2)
-    # text = text[pos+1:pos2] # remove []
-    text = content[pos:pos2+1]
+
+    # try:
+        # text = text[pos+1:pos2] # remove []
+        # text = content[pos1:pos2+1]
+    text = content[pos1:pos2+1]
     # keep []
     text = text.replace("\\", '')
     # print(text)
     return text
+    # except:
+    #     return False
+
 
 
 def save_response_content(filename, content, path=None):

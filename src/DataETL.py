@@ -83,8 +83,9 @@ def main(app):
     # sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):
-        # print(i, combo)
-        # continue
+        print(i, combo)
+        if i != 623:
+            continue
         i += start_index
 
         # Build query:
@@ -140,6 +141,9 @@ def main(app):
             content = get_response_content(response)
 
         text = fix_nielsen_content(content)
+        # print(len(text))
+        # print(text)
+        # sys.exit()
         save_response_content(query, text, date_dir)
         query_file = os.path.join(date_dir, query)
 
