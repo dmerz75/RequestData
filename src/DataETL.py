@@ -132,11 +132,8 @@ def main(app):
 
         # Request & Save!
         response, response_code = request_api(my_url, None, headers)
-        if ((response_code != 200) and (retries <= max_retries)):
-            print("retrying ", retries)
-            retries += 1
-            i -= 1
-            time.sleep(delay)
+        if response_code != 200:
+            continue
         else:
             content = get_response_content(response)
 
