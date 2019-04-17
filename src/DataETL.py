@@ -144,7 +144,7 @@ def main(app):
         query_file = os.path.join(date_dir, query)
 
         # cluster
-        dest_dir = os.path.join(cluster_dir + "%s_%s" % (job_type, end_date))
+        dest_dir = os.path.join(cluster_dir, job_type, end_date)
         result = push_file(query_file, dest_dir)
         if result:
             empty_file_content(query_file)
