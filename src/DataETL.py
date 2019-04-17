@@ -139,8 +139,8 @@ def main(app):
         text = fix_nielsen_content(content)
         save_response_content(query, text, output_dir)
 
-
-        dest_dir = os.path.join(cluster_dir + "%s_%s" % (job_type, start_date))
+        # cluster
+        dest_dir = os.path.join(cluster_dir + "%s_%s" % (job_type, end_date))
         push_file(os.path.join(output_dir, query), dest_dir)
         empty_file_content(query, output_dir)
 
