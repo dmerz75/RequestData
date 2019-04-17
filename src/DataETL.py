@@ -102,6 +102,9 @@ def main(app):
         # Date:
         start_date, end_date = get_date_range(combo[1], days=-6)
         print('Dates: ', start_date, " - ", end_date)
+        date_dir = os.path.join(output_dir, end_date)
+        if not os.path.exists(date_dir):
+            os.makedirs(date_dir)
         # print(combo)
         # break
 
@@ -137,8 +140,8 @@ def main(app):
             content = get_response_content(response)
 
         text = fix_nielsen_content(content)
-        save_response_content(query, text, output_dir)
-        query_file = os.path.join(output_dir, query)
+        save_response_content(query, text, date_dir)
+        query_file = os.path.join(date_dir, query)
 
         # cluster
         dest_dir = os.path.join(cluster_dir + "%s_%s" % (job_type, end_date))
