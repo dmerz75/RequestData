@@ -13,8 +13,7 @@
 
 run_local ()
 {
-    echo "Running local."
-    python main.py -j 'DataETL' \
+    python main.py -j DataETL \
     -n Nielsen \
     -t programRatings \
     -d 2019-03-13
@@ -22,8 +21,13 @@ run_local ()
 
 run_cluster ()
 {
-    echo "Running cluster."
+    # programRatings, commercialRatings, demographics, originators, marketBreaks, dataAvailability
+    klist || kinit
+    py36 main.py -j DataETL \
+    -n Nielsen \
+    -t programRatings \
+    -d 2019-03-25
 }
 
-run_local
-#run_cluster
+#run_local
+run_cluster
