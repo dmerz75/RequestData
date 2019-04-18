@@ -2,17 +2,22 @@ import subprocess
 
 def run_command(invocation):
     # print(type(invocation),invocation)
-    pipe = subprocess.Popen(invocation,
-                            stdin=subprocess.PIPE,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT)
-    stdout, stderr = pipe.communicate()
-    print('stdout >> ', stdout)
-    if stderr != None:
-        print('stderr >> ', stderr)
-        return stderr
-    else:
-        return True
+    try:
+        pipe = subprocess.Popen(invocation,
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT)
+        stdout, stderr = pipe.communicate()
+        print('stdout >> ', stdout)
+
+        if stderr != None:
+            print('stderr >> ', stderr)
+            return stderr
+        else:
+            return True
+    except FileNotFoundError:
+        print("Unable to execute: ", invocation)
+        return False
 
 
 def push_file(src, dest):

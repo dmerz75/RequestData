@@ -97,9 +97,6 @@ def main(app):
         query = query.replace('%', '_')
         query = query.replace(' ', '')
         query = query.replace('/', '')
-        if os.path.exists(os.path.join(output_dir, query)):
-            count_files_exist += 1
-            continue
 
         print(i, " of ", len(combinations))
 
@@ -111,6 +108,12 @@ def main(app):
             os.makedirs(date_dir)
         # print(combo)
         # break
+
+        # Existence check:
+        query_file = os.path.join(date_dir, query)
+        if os.path.exists(query_file):
+            count_files_exist += 1
+            continue
 
         # Build url:
         my_url = ''
@@ -141,11 +144,8 @@ def main(app):
             content = get_response_content(response)
 
         text = fix_nielsen_content(content)
-        # print(len(text))
-        # print(text)
-        # sys.exit()
         save_response_content(query, text, date_dir)
-        query_file = os.path.join(date_dir, query)
+
 
         # cluster
         dest_dir = os.path.join(cluster_dir, job_type, end_date)
