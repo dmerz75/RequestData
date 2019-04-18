@@ -13,6 +13,7 @@ from datetime import timedelta
 from src.response_query import extend_url, request_api, get_response_content
 from src.response_query import save_response_content, fix_nielsen_content, empty_file_content
 from src.cluster import push_file
+from src.cluster import run_command
 from src.date_range import get_date_range
 # from src.process_jsons import remove_brackets
 from lib.NielsenTechnicalAPI import nielsen_config as cfg
@@ -42,6 +43,7 @@ def main(app):
     params = config['params']
     headers = config['headers']
     num_weeks = config['num_weeks']
+    first_run = 0
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -138,6 +140,13 @@ def main(app):
 
         # cluster
         dest_dir = os.path.join(cluster_dir, job_type, end_date)
+        if first_run == 0:
+            command_dest_dir = ['hadoop', 'fs', '-mkdir', '-p', dest_dir]
+            result = run_command(command_dest_dir)
+            first_run += 1
+            if not result:
+                sys.exit(1)
+
         result = push_file(query_file, dest_dir)
         if result:
             empty_file_content(query_file)

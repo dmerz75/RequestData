@@ -113,4 +113,4 @@ def empty_file_content(filename, path=None):
     except IOError:
         print("{}  not emptied.".format(filename))
         return 0
-    return
+    return 0
