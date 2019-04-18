@@ -25,16 +25,10 @@ def main(app):
     Build the url.
     Request data from url.
     '''
-
-    # job_name = app.args[0]
     job_name = app.args['job_name']
     job_type = app.args['job_type']
     # job_type = 'programRatings'
-    # job_type = 'commercialRatings'
-    # job_type = 'originators'
-    # job_type = 'demographics'
-    # job_type = 'marketBreaks'
-    # job_type = 'dataAvailability'
+    # 'commercialRatings' 'originators' 'demographics' 'marketBreaks' 'dataAvailability'
 
     # Configurations: params, headers
     config = cfg[job_name][job_type]
@@ -48,7 +42,6 @@ def main(app):
     params = config['params']
     headers = config['headers']
     num_weeks = config['num_weeks']
-    max_retries = 25
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -82,8 +75,6 @@ def main(app):
     print("Example: ", combinations[0])
     count_files_exist = 0
     start_index = 0
-    retries = 0
-    # sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):
         # print(i, combo)
@@ -93,7 +84,6 @@ def main(app):
 
         # Build query:
         query = ''.join(combo) + '.' + outfile_type
-        # query = query.replace('%2B3','_')
         query = query.replace('%', '_')
         query = query.replace(' ', '')
         query = query.replace('/', '')
@@ -146,15 +136,13 @@ def main(app):
         text = fix_nielsen_content(content)
         save_response_content(query, text, date_dir)
 
-
         # cluster
         dest_dir = os.path.join(cluster_dir, job_type, end_date)
         result = push_file(query_file, dest_dir)
         if result:
             empty_file_content(query_file)
-            print(query_file, " -- emptied! --")
         else:
-            print(query_file, " -- REMOVED! --")
+            print(query_file, " -->  REMOVED!")
             os.remove(query_file)
 
         # save_response_content(query, response, response_text, output_dir, outfile_type)

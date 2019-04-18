@@ -23,7 +23,8 @@ run_cluster ()
 {
     # programRatings, commercialRatings, demographics, originators, marketBreaks, dataAvailability
     klist || kinit
-    py36 main.py -j DataETL \
+    /home/merz.d/activestate/py36/bin/python3.6 main.py \
+    -j DataETL \
     -n Nielsen \
     -t programRatings \
     -d 2019-03-25
