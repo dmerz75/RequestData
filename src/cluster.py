@@ -1,25 +1,11 @@
-import subprocess
+from src.run_command import run_command
 
-def run_command(invocation):
-    # print(type(invocation),invocation)
-    try:
-        pipe = subprocess.Popen(invocation,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
-        stdout, stderr = pipe.communicate()
-        print('stdout >> ', stdout)
-        # print('stderr >> ', stderr)
-
-        if stderr != None:
-            print('stderr >> ', stderr)
-            return False
-        else:
-            return True
-    except FileNotFoundError:
-        print("Unable to execute: ", invocation)
-        return False
-
+def get_file_list(dest):
+    """
+    :param dest: the directory being queried
+    :return: the file listing for the dest directory
+    """
+    print(dest)
 
 def push_file(src, dest):
     # return False

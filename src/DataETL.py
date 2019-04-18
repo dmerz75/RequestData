@@ -3,19 +3,14 @@
 import os
 import sys
 import time
-# import requests
-# import json
-# import re
 import itertools
-# from pprint import pprint
 from datetime import datetime
 from datetime import timedelta
 from src.response_query import extend_url, request_api, get_response_content
 from src.response_query import save_response_content, fix_nielsen_content, empty_file_content
 from src.cluster import push_file
-from src.cluster import run_command
+from src.run_command import run_command
 from src.date_range import get_date_range
-# from src.process_jsons import remove_brackets
 from lib.NielsenTechnicalAPI import nielsen_config as cfg
 
 
@@ -27,7 +22,8 @@ def main(app):
     Request data from url.
     '''
     job_name = app.args['job_name']
-    job_type = app.args['job_type']
+    job_type = app.args['job_args'][0]
+    # print(app.args)
     # job_type = 'programRatings'
     # 'commercialRatings' 'originators' 'demographics' 'marketBreaks' 'dataAvailability'
 
@@ -55,7 +51,7 @@ def main(app):
 
     # Date:
     # start_date = datetime.strptime(config['startDate'], date_format)
-    start_date = datetime.strptime(app.args['date'], date_format)
+    start_date = datetime.strptime(app.args['job_args'][1], date_format)
     date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(0, num_weeks)]
     print('Dates: ', len(date_list), date_list)
     # sys.exit()
@@ -145,7 +141,8 @@ def main(app):
             result = run_command(command_dest_dir)
             first_run += 1
             if not result:
-                sys.exit(1)
+                print(result)
+                # sys.exit(1)
 
         result = push_file(query_file, dest_dir)
         if result:
