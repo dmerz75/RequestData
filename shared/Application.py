@@ -30,14 +30,18 @@ class Application:
         parser = argparse.ArgumentParser()
         parser.add_argument("-j", "--job", help="The Job Name, like DataETL")
         parser.add_argument("-n", "--job_name", help="The Job Key: Nielsen")
-        parser.add_argument("-t", "--job_type", help="The Job Key: programRatings")
-        parser.add_argument("-d", "--date", help="A Date: YYYY-MM-DD. ex. 2019-03-25")
+        parser.add_argument("job_args", nargs='*')
+        # parser.add_argument("-a", "--job_args", help="The Job Args")
+        # parser.add_argument("-t", "--job_type", help="The Job Key: programRatings")
+        # parser.add_argument("-d", "--date", help="A Date: YYYY-MM-DD. ex. 2019-03-25")
+        # parser.add_argument('--job_args', nargs='*', default=[])
         args = vars(parser.parse_args())
+        # print(args)
         self.args = args
 
     def _run_job(self):
         # print(sys.argv)
-        print(self.job)
+        # print(self.job)
 
         # Importing our job script
         job_module = importlib.import_module('src.{}'.format(self.job))

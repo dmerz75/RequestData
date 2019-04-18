@@ -15,8 +15,8 @@ run_local ()
 {
     python main.py -j DataETL \
     -n Nielsen \
-    -t programRatings \
-    -d 2019-03-13
+    programRatings \
+    2019-03-13
 }
 
 run_cluster ()
@@ -26,8 +26,8 @@ run_cluster ()
     /home/merz.d/activestate/py36/bin/python3.6 main.py \
     -j DataETL \
     -n Nielsen \
-    -t programRatings \
-    -d 2019-03-25
+    programRatings \
+    2019-03-25
 }
 
 #run_local
