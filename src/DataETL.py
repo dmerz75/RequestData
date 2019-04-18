@@ -26,8 +26,10 @@ def main(app):
     Request data from url.
     '''
 
-    job_name = app.args[0]
-    job_type = 'programRatings'
+    # job_name = app.args[0]
+    job_name = app.args['job_name']
+    job_type = app.args['job_type']
+    # job_type = 'programRatings'
     # job_type = 'commercialRatings'
     # job_type = 'originators'
     # job_type = 'demographics'
@@ -57,9 +59,11 @@ def main(app):
     print('base_url: ', base_url)
 
     # Date:
-    start_date = datetime.strptime(config['startDate'], date_format)
+    # start_date = datetime.strptime(config['startDate'], date_format)
+    start_date = datetime.strptime(app.args['date'], date_format)
     date_list = [str(start_date + timedelta(days=-1*6*i))[0:10] for i in range(0, num_weeks)]
     print('Dates: ', len(date_list), date_list)
+    # sys.exit()
 
     # Generate all combinations of queries to the url api.
     # keys = sorted(['contributions', 'dataStreams', 'demographics', 'mediaSources', 'originators', 'sample', 'startDate'])
@@ -79,7 +83,6 @@ def main(app):
     count_files_exist = 0
     start_index = 0
     retries = 0
-
     # sys.exit()
 
     for i, combo in enumerate(combinations[start_index:]):

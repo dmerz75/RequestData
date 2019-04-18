@@ -26,13 +26,14 @@ class Application:
             print(key, ':\t', getattr(self, key))
 
     def _get_args(self):
-        print(sys.argv)
+        # print(sys.argv)
         parser = argparse.ArgumentParser()
-        parser.add_argument("-j", "--job_name", help="The Job Name")
+        parser.add_argument("-j", "--job", help="The Job Name, like DataETL")
+        parser.add_argument("-n", "--job_name", help="The Job Key: Nielsen")
+        parser.add_argument("-t", "--job_type", help="The Job Key: programRatings")
+        parser.add_argument("-d", "--date", help="A Date: YYYY-MM-DD. ex. 2019-03-25")
         args = vars(parser.parse_args())
-        # print(args)
-        # sys.exit()
-        self.args = list(args)
+        self.args = args
 
     def _run_job(self):
         # print(sys.argv)
