@@ -42,6 +42,10 @@ def main(app):
     # del_list = local_list - hdfs_list
     del_list = [x for x in local_list if x not in hdfs_list]
 
+    print("hdfs:      ", len(hdfs_list))
+    print("local:     ", len(local_list))
+    print("to delete: ", len(del_list))
+
     for fp in del_list:
         print(fp)
         # os.remove(fp)
