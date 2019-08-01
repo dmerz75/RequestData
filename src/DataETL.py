@@ -28,8 +28,14 @@ def main(app):
     # 'commercialRatings' 'originators' 'demographics' 'marketBreaks' 'dataAvailability'
 
     # Configurations: params, headers
+    # config = cfg[job_name][job_type]
     config = cfg[job_name][job_type]
     positions = cfg[job_name]['positions']
+    print(cfg.keys())
+    print(job_name)
+    print(config)
+    # positions = config['positions']
+    # positions =
     output_dir = config['output_dir'] + job_type
     cluster_dir = config['cluster_dir']
     outfile_type = config['output_file_type']
@@ -111,13 +117,22 @@ def main(app):
             my_url = extend_url(my_url, 'endDate=', end_date, '&')
 
         for k in params.keys():
+        # for j, k in enumerate(params.keys()):
             if k in ['sample', 'startDate', 'endDate']:
                 continue
-            # print(k)
-            # print(positions[k])
+
             # print(combo)
+            # print("J is: ", j)
+            # print("K is: ", k)
+            # print(combo[j])
+
+            # print(positions[k])
             my_url = extend_url(my_url, '{}='.format(k), combo[positions[k]], '&')
+            # my_url = extend_url(my_url, '{}='.format(k), combo[j], '&')
             # print(my_url)
+
+        # break
+        # continue
 
         # strip final '&'
         my_url = my_url[0:-1]
@@ -132,6 +147,8 @@ def main(app):
             content = get_response_content(response)
 
         text = fix_nielsen_content(content)
+
+        continue
         save_response_content(query, text, date_dir)
 
         # cluster

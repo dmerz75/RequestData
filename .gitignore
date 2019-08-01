@@ -1,5 +1,6 @@
 test*
 api_*
+py36rd/*
 *downloads*
 extras*
 .idea/
